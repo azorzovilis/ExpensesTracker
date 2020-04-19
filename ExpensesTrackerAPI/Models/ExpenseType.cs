@@ -1,9 +1,11 @@
 ﻿namespace ExpensesTrackerAPI.Models
 {
-    public enum ExpenseType
+    using Enums;
+
+    public class ExpenseType
     {
-        Other = 0,
-        Food = 1,
-        Drinks = 2
+        public ExpenseTypeId ExpenseTypeId { get; set; }
+
+        public string Description { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace ExpensesTrackerAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ExpenseType")
+                    b.Property<int>("ExpenseTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Recipient")
@@ -45,7 +45,48 @@ namespace ExpensesTrackerAPI.Migrations
 
                     b.HasKey("ExpenseId");
 
+                    b.HasIndex("ExpenseTypeId");
+
                     b.ToTable("Expense");
+                });
+
+            modelBuilder.Entity("ExpensesTrackerAPI.Models.ExpenseType", b =>
+                {
+                    b.Property<int>("ExpenseTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ExpenseTypeId");
+
+                    b.ToTable("ExpenseType");
+
+                    b.HasData(
+                        new
+                        {
+                            ExpenseTypeId = 0,
+                            Description = "Other"
+                        },
+                        new
+                        {
+                            ExpenseTypeId = 1,
+                            Description = "Food"
+                        },
+                        new
+                        {
+                            ExpenseTypeId = 2,
+                            Description = "Drinks"
+                        });
+                });
+
+            modelBuilder.Entity("ExpensesTrackerAPI.Models.Expense", b =>
+                {
+                    b.HasOne("ExpensesTrackerAPI.Models.ExpenseType", "ExpenseType")
+                        .WithMany()
+                        .HasForeignKey("ExpenseTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

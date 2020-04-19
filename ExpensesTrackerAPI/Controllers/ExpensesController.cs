@@ -26,7 +26,9 @@
         [HttpGet]
         public IEnumerable<Expense> GetExpenses()
         {
-            return _context.Expenses.OrderByDescending(p => p.ExpenseId);
+            return _context.Expenses
+                .Include(et => et.ExpenseType)
+                .OrderByDescending(p => p.ExpenseId);
         }
 
         // GET: api/expenses/5
@@ -116,6 +118,13 @@
             var save = await _repo.SaveAsync(expense);
 
             return Ok(expense);
+        }
+
+        [HttpGet]
+        [Route("Types")]
+        public IEnumerable<ExpenseType> Details()
+        {
+            return _context.ExpenseType.OrderBy(et => et.ExpenseTypeId);
         }
 
         private bool ExpenseExists(int id)
