@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Cache;
     using DAL;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -15,11 +16,15 @@
     {
         private readonly ExpensesContext _context;
         private readonly IDataRepository<Expense> _repo;
+        private readonly IMemoryCacheService<IEnumerable<ExpenseType>> _cacheService;
 
-        public ExpensesController(ExpensesContext context, IDataRepository<Expense> repo)
+        public ExpensesController(ExpensesContext context,
+            IDataRepository<Expense> repo,
+            IMemoryCacheService<IEnumerable<ExpenseType>> cacheService)
         {
             _context = context;
             _repo = repo;
+            _cacheService = cacheService;
         }
 
         // GET: api/expenses
@@ -122,9 +127,12 @@
 
         [HttpGet]
         [Route("Types")]
-        public IEnumerable<ExpenseType> Details()
-        {
-            return _context.ExpenseType.OrderBy(et => et.ExpenseTypeId);
+        public async Task<IActionResult> GetExpenseTypes()
+        { 
+            var expenseTypes = await _cacheService
+                .GetOrCreate("ExpenseTypes", async () => await _context.ExpenseType.ToListAsync());
+
+            return Ok(expenseTypes);
         }
 
         private bool ExpenseExists(int id)
