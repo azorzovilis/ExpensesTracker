@@ -55,6 +55,8 @@ namespace ExpensesTrackerAPI
 
             services.AddSingleton(typeof(IMemoryCacheService<>), typeof(MemoryCacheService<>));
             services.AddSingleton<ICurrencyService, CurrencyService>();
+            services.AddScoped<IExpensesService, ExpensesService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

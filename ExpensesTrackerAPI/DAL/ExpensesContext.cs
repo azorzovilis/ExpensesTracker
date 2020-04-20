@@ -1,7 +1,6 @@
 ﻿namespace ExpensesTrackerAPI.DAL
 {
     using System;
-    using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using ExpensesTrackerAPI.Models.Enums;
     using Microsoft.EntityFrameworkCore;
@@ -9,14 +8,15 @@
 
     public class ExpensesContext : DbContext
     {
+        public ExpensesContext()
+        { }
+
         public ExpensesContext(DbContextOptions<ExpensesContext> options)
             : base(options)
-        {
-        }
+        { }
 
-        public DbSet<Expense> Expenses { get; set; }
-        public DbSet<ExpenseType> ExpenseType { get; set; }
-
+        public virtual DbSet<Expense> Expenses { get; set; }
+        public virtual DbSet<ExpenseType> ExpenseType { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,8 +26,7 @@
             modelBuilder.Entity<ExpenseType>().ToTable("ExpenseType");
 
             modelBuilder.Entity<Expense>()
-                .Property(p => p.Amount)
-                .HasColumnType("decimal(18,4)");
+                .Property(p => p.Amount).HasColumnType("decimal(18,4)");
 
             modelBuilder
                 .Entity<ExpenseType>().HasData(

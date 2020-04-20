@@ -8,35 +8,35 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Models;
+    using Services;
 
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
     public class ExpensesController : ControllerBase
     {
+        private readonly IExpensesService _expensesService;
         private readonly ExpensesContext _context;
         private readonly IDataRepository<Expense> _repo;
         private readonly IMemoryCacheService<IEnumerable<ExpenseType>> _cacheService;
 
-        public ExpensesController(ExpensesContext context,
+        public ExpensesController(IExpensesService expensesService,
+            ExpensesContext context,
             IDataRepository<Expense> repo,
             IMemoryCacheService<IEnumerable<ExpenseType>> cacheService)
         {
+            _expensesService = expensesService;
             _context = context;
             _repo = repo;
             _cacheService = cacheService;
         }
 
-        // GET: api/expenses
         [HttpGet]
         public IEnumerable<Expense> GetExpenses()
         {
-            return _context.Expenses
-                .Include(et => et.ExpenseType)
-                .OrderByDescending(p => p.ExpenseId);
+            return _expensesService.GetExpenses();
         }
 
-        // GET: api/expenses/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetExpense([FromRoute] int id)
         {
@@ -45,7 +45,7 @@
                 return BadRequest(ModelState);
             }
 
-            var expense = await _context.Expenses.FindAsync(id);
+            var expense = await _expensesService.GetExpense(id);
 
             if (expense == null)
             {

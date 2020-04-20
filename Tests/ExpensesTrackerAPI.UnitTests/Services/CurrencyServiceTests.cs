@@ -36,6 +36,7 @@ namespace ExpensesTrackerAPI.UnitTests.Services
         [Test]
         [TestCase("CHF")]
         [TestCase("EUR")]
+        [TestCase("GBP")]
         [TestCase("USD")]
         public void GivenAValidCurrencyCode_WhenIsValidCurrencyIsCalled_ThenResultShouldBeTrue(string ISOCode)
         {
