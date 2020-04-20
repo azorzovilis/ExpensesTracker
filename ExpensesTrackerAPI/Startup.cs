@@ -15,6 +15,7 @@ namespace ExpensesTrackerAPI
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.OpenApi.Models;
+    using Services;
 
     public class Startup
     {
@@ -53,6 +54,7 @@ namespace ExpensesTrackerAPI
             services.AddScoped(typeof(IDataRepository<>), typeof(DataRepository<>));
 
             services.AddSingleton(typeof(IMemoryCacheService<>), typeof(MemoryCacheService<>));
+            services.AddSingleton<ICurrencyService, CurrencyService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
