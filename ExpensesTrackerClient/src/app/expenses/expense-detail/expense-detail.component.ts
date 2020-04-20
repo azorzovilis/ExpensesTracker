@@ -5,7 +5,6 @@ import { IExpense } from '../../models/expense';
 import { ExpenseService } from '../expense.service';
 
 @Component({
-  //selector: 'expense-detail',
   templateUrl: './expense-detail.component.html',
   styleUrls: ['./expense-detail.component.less']
 })

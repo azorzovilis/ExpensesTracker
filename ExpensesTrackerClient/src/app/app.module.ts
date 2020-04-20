@@ -22,7 +22,6 @@ import { ExpenseAddEditComponent } from './expenses/expense-add-edit/expense-add
   imports: [
     BrowserModule,
     HttpClientModule,
-    //AppRoutingModule,
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes, {
       enableTracing: false // for Debugging of the Routes

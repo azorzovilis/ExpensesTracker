@@ -69,7 +69,7 @@ export class ExpenseAddEditComponent implements OnInit {
             this.form.controls[this.formAmount].setValue(response.amount),
             this.form.controls[this.formRecipientName].setValue(response.recipient),
             this.form.controls[this.formCurrency].setValue(response.currency);
-            this.form.controls[this.formExpenseType].setValue(response.expenseType)
+            this.form.controls[this.formExpenseType].setValue(response.expenseType.expenseTypeId)
         }, error => console.error(error));
     }
   }
@@ -106,7 +106,7 @@ export class ExpenseAddEditComponent implements OnInit {
       };
       this.expenseService.updateExpense(expense.expenseId, expense)
         .subscribe(() => {
-          this.router.navigate([this.router.url]);
+          this.router.navigate(['/']);
         });
     }
   }
@@ -117,5 +117,7 @@ export class ExpenseAddEditComponent implements OnInit {
 
   get recipient() { return this.form.get(this.formRecipientName); }
   get amount() { return this.form.get(this.formAmount); }
+  get currency() { return this.form.get(this.formCurrency); }
   get expenseType() { return this.form.get(this.formExpenseType); }
+
 }

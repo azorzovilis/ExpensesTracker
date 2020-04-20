@@ -25,6 +25,7 @@
                         <th>Amount</th>
                         <th>Recipient</th>
                         <th>Type</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,7 +38,6 @@
                         <td>{{ expense.amount | currency:expense.currency:'symbol-narrow':'1.2-2'}}</td>
                         <td>{{ expense.recipient }}</td>
                         <td>{{ expense.expenseType.description }}</td>
-                        <td>
                         <td>
                             <a [routerLink]="['/expense/edit/', expense.expenseId]">Edit</a> |
                             <a [routerLink]="['/expense/delete/', expense.expenseId]" (click)="delete(expense.expenseId)">Delete</a>

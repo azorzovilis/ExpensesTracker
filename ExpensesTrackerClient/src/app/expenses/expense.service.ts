@@ -11,7 +11,7 @@ import { ICurrency } from '../models/currency';
   providedIn: 'root'
 })
 export class ExpenseService {
-  private readonly expensesApiUrl: string = 'https://localhost:44330/api/';
+  private readonly baseApiUrl: string = 'https://localhost:44330/api/';
   
   httpOptions = {
     headers: new HttpHeaders({
@@ -22,7 +22,7 @@ export class ExpenseService {
   constructor(private http: HttpClient) { }
 
   getExpenses(): Observable<IExpense[]> {
-    return this.http.get<IExpense[]>(this.expensesApiUrl + 'expenses/')
+    return this.http.get<IExpense[]>(this.baseApiUrl + 'expenses/')
       .pipe(
         retry(1),
         tap(data => console.log('All: ' + JSON.stringify(data))),
@@ -31,7 +31,7 @@ export class ExpenseService {
   }
 
   getExpense(id: number): Observable<IExpense> {
-    return this.http.get<IExpense>(this.expensesApiUrl + 'expenses/' + id)
+    return this.http.get<IExpense>(this.baseApiUrl + 'expenses/' + id)
       .pipe(
         retry(1),
         tap(data => console.log('All: ' + JSON.stringify(data))),
@@ -40,7 +40,7 @@ export class ExpenseService {
   }
 
   getCurrencies(): Observable<ICurrency[]> {
-    return this.http.get<ICurrency[]>(this.expensesApiUrl + 'Currency')
+    return this.http.get<ICurrency[]>(this.baseApiUrl + 'Currency')
       .pipe(
         tap(data => console.log('All: ' + JSON.stringify(data))),
         catchError(this.handleError)
@@ -48,7 +48,7 @@ export class ExpenseService {
   }
 
   getExpenseTypes(): Observable<ExpenseType[]> {
-    return this.http.get<ExpenseType[]>(this.expensesApiUrl + 'expenses/types')
+    return this.http.get<ExpenseType[]>(this.baseApiUrl + 'expenses/types')
       .pipe(
         tap(data => console.log('All: ' + JSON.stringify(data))),
         catchError(this.handleError)
@@ -56,7 +56,7 @@ export class ExpenseService {
   }
 
   createExpense(expense): Observable<IExpense> {
-    return this.http.post<IExpense>(this.expensesApiUrl + 'expenses/', JSON.stringify(expense), this.httpOptions)
+    return this.http.post<IExpense>(this.baseApiUrl + 'expenses/', JSON.stringify(expense), this.httpOptions)
       .pipe(
         retry(1),
         catchError(this.handleError)
@@ -64,7 +64,7 @@ export class ExpenseService {
   }
 
   updateExpense(expenseId: number, expense): Observable<IExpense> {
-    return this.http.put<IExpense>(this.expensesApiUrl + 'expenses/' + expenseId, JSON.stringify(expense), this.httpOptions)
+    return this.http.put<IExpense>(this.baseApiUrl + 'expenses/' + expenseId, JSON.stringify(expense), this.httpOptions)
       .pipe(
         retry(1),
         catchError(this.handleError)
@@ -72,7 +72,7 @@ export class ExpenseService {
   }
 
   deleteExpense(expenseId: number): Observable<IExpense> {
-    return this.http.delete<IExpense>(this.expensesApiUrl + 'expenses/' + expenseId)
+    return this.http.delete<IExpense>(this.baseApiUrl + 'expenses/' + expenseId)
       .pipe(
         retry(1),
         catchError(this.handleError)
@@ -80,15 +80,10 @@ export class ExpenseService {
   }
 
   private handleError(error) {
-    // in a real world app, we may send the server to some remote logging infrastructure
-    // instead of just logging it to the console
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
       errorMessage = `An error occurred: ${error.error.message}`;
     } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
       errorMessage = `Server returned code: ${error.status}, error message is: ${error.message}`;
     }
 

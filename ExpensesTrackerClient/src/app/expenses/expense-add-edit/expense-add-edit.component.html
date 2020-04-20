@@ -43,7 +43,7 @@
                     </option>
                 </select>
             </div>
-            <span class="text-danger" *ngIf="currency.invalid && formDir.submitted">
+            <span class="text-danger ml-3" *ngIf="currency?.invalid && formDir.submitted">
                 Currency is required
             </span>
         </div>
@@ -58,7 +58,7 @@
                     </option>
                 </select>
             </div>
-            <span class="text-danger" *ngIf="expenseType?.invalid && formDir.submitted">
+            <span class="text-danger  ml-3" *ngIf="expenseType?.invalid && formDir.submitted">
                 Type is required
             </span>
         </div>

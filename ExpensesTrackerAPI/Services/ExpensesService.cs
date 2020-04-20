@@ -27,12 +27,15 @@
         {
             return await _context.Expenses
                 .Include(et => et.ExpenseType)
-                .OrderByDescending(p => p.ExpenseId).ToListAsync();
+                .OrderByDescending(exp => exp.ExpenseId)
+                .ToListAsync();
         }
 
         public async Task<Expense> GetExpense(int expenseId)
         {
-            return await _context.Expenses.FindAsync(expenseId);
+            return await _context.Expenses
+                .Include(et => et.ExpenseType)
+                .SingleOrDefaultAsync(exp => exp.ExpenseId == expenseId);
         }
 
         public async Task<Expense> CreateExpense(Expense expense)
