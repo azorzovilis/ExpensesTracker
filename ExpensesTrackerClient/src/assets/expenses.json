@@ -1,0 +1,37 @@
+[
+    {
+      "expenseId": 1,
+      "recipient": "Leaf Rake",
+      "transactionDate": "March 19, 2019",
+      "amount": 19.95,
+      "imageUrl": "assets/images/leaf_rake.png"
+    },
+    {
+      "expenseId": 2,
+      "recipient": "Garden Cart",
+      "transactionDate": "March 18, 2019",
+      "amount": 32.99,
+      "imageUrl": "assets/images/garden_cart.png"
+    },
+    {
+      "expenseId": 5,
+      "recipient": "Hammer",
+      "transactionDate": "May 21, 2019",
+      "amount": 8.9,
+      "imageUrl": "assets/images/hammer.png"
+    },
+    {
+      "expenseId": 8,
+      "recipient": "Saw",
+      "transactionDate": "May 15, 2019",
+      "amount": 11.55,
+      "imageUrl": "assets/images/saw.png"
+    },
+    {
+      "expenseId": 10,
+      "recipient": "Video Game Controller",
+      "transactionDate": "October 15, 2018",
+      "amount": 35.95,
+      "imageUrl": "assets/images/xbox-controller.png"
+    }
+  ]
