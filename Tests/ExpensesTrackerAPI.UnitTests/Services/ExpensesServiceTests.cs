@@ -3,6 +3,7 @@ namespace ExpensesTrackerAPI.UnitTests.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Cache;
     using DAL;
     using ExpensesTrackerAPI.Services;
@@ -19,7 +20,7 @@ namespace ExpensesTrackerAPI.UnitTests.Services
 
         private DbContextOptions<ExpensesContext> _options;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             _options = new DbContextOptionsBuilder<ExpensesContext>()
@@ -40,7 +41,7 @@ namespace ExpensesTrackerAPI.UnitTests.Services
         }
 
         [Test]
-        public void GivenACurrencyService_WhenGetCurrenciesIsCalled_ThenCurrencyListShouldBeReturned()
+        public void GivenAnExpenseService_WhenGetExpensesIsCalled_ThenExpenseListShouldBeReturned()
         {
             // Use a clean instance of the context to run the test
             using (var context = new ExpensesContext(_options))
@@ -52,6 +53,23 @@ namespace ExpensesTrackerAPI.UnitTests.Services
 
                 var result = _itemUnderTest.GetExpenses();
                 Assert.AreEqual(2, result.Count());
+            }
+        }
+
+        [Test]
+        public async Task GivenAnExpenseService_WhenGetExpenseIsCalled_ThenExpenseShouldBeReturned()
+        {
+            // Use a clean instance of the context to run the test
+            using (var context = new ExpensesContext(_options))
+            {
+                _itemUnderTest = new ExpensesService(context,
+                    Mock.Of<IDataRepository<Expense>>(),
+                    Mock.Of<IMemoryCacheService<IEnumerable<ExpenseType>>>()
+                );
+
+                var result = await _itemUnderTest.GetExpense(expenseId: 2);
+                Assert.AreEqual("Eliza", result.Recipient);
+                Assert.AreEqual("GBP", result.Currency);
             }
         }
     }

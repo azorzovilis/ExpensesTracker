@@ -1,10 +1,7 @@
 ﻿namespace ExpensesTrackerAPI.Controllers
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
-    using Cache;
-    using DAL;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Models;
@@ -16,19 +13,10 @@
     public class ExpensesController : ControllerBase
     {
         private readonly IExpensesService _expensesService;
-        private readonly ExpensesContext _context;
-        private readonly IDataRepository<Expense> _repo;
-        private readonly IMemoryCacheService<IEnumerable<ExpenseType>> _cacheService;
 
-        public ExpensesController(IExpensesService expensesService,
-            ExpensesContext context,
-            IDataRepository<Expense> repo,
-            IMemoryCacheService<IEnumerable<ExpenseType>> cacheService)
+        public ExpensesController(IExpensesService expensesService)
         {
             _expensesService = expensesService;
-            _context = context;
-            _repo = repo;
-            _cacheService = cacheService;
         }
 
         [HttpGet]
@@ -55,9 +43,8 @@
             return Ok(expense);
         }
 
-        // PUT: api/expenses/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutExpense([FromRoute] int id, [FromBody] Expense expense)
+        public async Task<IActionResult> UpdateExpense([FromRoute] int id, [FromBody] Expense expense)
         {
             if (!ModelState.IsValid)
             {
@@ -69,16 +56,15 @@
                 return BadRequest();
             }
 
-            _context.Entry(expense).State = EntityState.Modified;
-
             try
             {
-                _repo.Update(expense);
-                var save = await _repo.SaveAsync(expense);
+                await _expensesService.UpdateExpense(expense);
             }
-            catch (DbUpdateConcurrencyException)
+            catch(DbUpdateConcurrencyException)
             {
-                if (!ExpenseExists(id))
+                var expenseExists = await _expensesService.ExpenseExists(id);
+
+                if (!expenseExists)
                 {
                     return NotFound();
                 }
@@ -89,22 +75,19 @@
             return NoContent();
         }
 
-        // POST: api/expenses
         [HttpPost]
-        public async Task<IActionResult> PostExpense([FromBody] Expense expense)
+        public async Task<IActionResult> CreateExpense([FromBody] Expense expense)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _repo.Add(expense);
-            var save = await _repo.SaveAsync(expense);
+            var newExpense = await _expensesService.CreateExpense(expense);
 
-            return CreatedAtAction("GetExpense", new { id = expense.ExpenseId }, expense);
+            return CreatedAtAction("GetExpense", new { id = newExpense.ExpenseId }, newExpense);
         }
 
-        // DELETE: api/expenses/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteExpense([FromRoute] int id)
         {
@@ -113,31 +96,24 @@
                 return BadRequest(ModelState);
             }
 
-            var expense = await _context.Expenses.FindAsync(id);
+            var expense = await _expensesService.GetExpense(id);
             if (expense == null)
             {
                 return NotFound();
             }
 
-            _repo.Delete(expense);
-            var save = await _repo.SaveAsync(expense);
+            await _expensesService.DeleteExpense(expense);
 
-            return Ok(expense);
+            return Ok();
         }
 
         [HttpGet]
         [Route("Types")]
         public async Task<IActionResult> GetExpenseTypes()
-        { 
-            var expenseTypes = await _cacheService
-                .GetOrCreate("ExpenseTypes", async () => await _context.ExpenseType.ToListAsync());
+        {
+            var expenseTypes = await _expensesService.GetExpenseTypes();
 
             return Ok(expenseTypes);
-        }
-
-        private bool ExpenseExists(int id)
-        {
-            return _context.Expenses.Any(e => e.ExpenseId == id);
         }
     }
 }

@@ -7,7 +7,6 @@
     using DAL;
     using ExpensesTrackerAPI.Models;
     using Microsoft.EntityFrameworkCore;
-    using Models;
 
     public class ExpensesService : IExpensesService
     {
@@ -26,8 +25,6 @@
 
         public IEnumerable<Expense> GetExpenses()
         {
-            //return _context.Expenses;
-
             return _context.Expenses
                 .Include(et => et.ExpenseType)
                 .OrderByDescending(p => p.ExpenseId);
@@ -36,6 +33,40 @@
         public async Task<Expense> GetExpense(int expenseId)
         {
             return await _context.Expenses.FindAsync(expenseId);
+        }
+
+        public async Task<Expense> CreateExpense(Expense expense)
+        {
+            _repo.Add(expense);
+            return await _repo.SaveAsync(expense);
+        }
+
+        public async Task<Expense> UpdateExpense(Expense expense)
+        {
+            _context.Entry(expense).State = EntityState.Modified;
+
+            _repo.Update(expense);
+
+            return await _repo.SaveAsync(expense);
+        }
+
+        public async Task<Expense> DeleteExpense(Expense expense)
+        {
+            _repo.Delete(expense);
+            return await _repo.SaveAsync(expense);
+        }
+
+        public async Task<bool> ExpenseExists(int expenseId)
+        {
+            return await _context.Expenses.AnyAsync(e => e.ExpenseId == expenseId);
+        }
+
+        public async Task<IEnumerable<ExpenseType>> GetExpenseTypes()
+        {
+            const string expenseTypeKey = "ExpenseTypes";
+
+            return await _cacheService
+                .GetOrCreate(expenseTypeKey, async () => await _context.ExpenseType.ToListAsync());
         }
     }
 }
