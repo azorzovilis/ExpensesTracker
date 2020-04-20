@@ -3,11 +3,10 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using ExpensesTrackerAPI.Models;
-    using Models;
 
     public interface IExpensesService
     {
-        IEnumerable<Expense> GetExpenses();
+        Task<IEnumerable<Expense>> GetExpenses();
 
         Task<Expense> GetExpense(int expenseId);
 

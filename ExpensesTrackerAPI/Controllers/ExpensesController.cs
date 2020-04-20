@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
     using Models;
     using Services;
 
@@ -13,16 +14,21 @@
     public class ExpensesController : ControllerBase
     {
         private readonly IExpensesService _expensesService;
+        private readonly ILogger<ExpensesController> _logger;
 
-        public ExpensesController(IExpensesService expensesService)
+        public ExpensesController(IExpensesService expensesService,
+            ILogger<ExpensesController> logger)
         {
             _expensesService = expensesService;
+            _logger = logger;
         }
 
         [HttpGet]
-        public IEnumerable<Expense> GetExpenses()
+        public async Task<IActionResult> GetExpenses()
         {
-            return _expensesService.GetExpenses();
+            var expenses = await _expensesService.GetExpenses();
+
+            return Ok(expenses);
         }
 
         [HttpGet("{id}")]
@@ -37,6 +43,7 @@
 
             if (expense == null)
             {
+                _logger.LogInformation($"Failed to retrieve expense with id={id}");
                 return NotFound();
             }
 
@@ -60,8 +67,10 @@
             {
                 await _expensesService.UpdateExpense(expense);
             }
-            catch(DbUpdateConcurrencyException)
+            catch(DbUpdateConcurrencyException e)
             {
+                _logger.LogError(e, "Concurrency conflicts detected", expense);
+
                 var expenseExists = await _expensesService.ExpenseExists(id);
 
                 if (!expenseExists)
@@ -99,6 +108,7 @@
             var expense = await _expensesService.GetExpense(id);
             if (expense == null)
             {
+                _logger.LogInformation($"Failed to delete expense with id={id}");
                 return NotFound();
             }
 

@@ -41,7 +41,7 @@ namespace ExpensesTrackerAPI.UnitTests.Services
         }
 
         [Test]
-        public void GivenAnExpenseService_WhenGetExpensesIsCalled_ThenExpenseListShouldBeReturned()
+        public async Task GivenAnExpenseService_WhenGetExpensesIsCalled_ThenExpenseListShouldBeReturned()
         {
             // Use a clean instance of the context to run the test
             using (var context = new ExpensesContext(_options))
@@ -51,7 +51,7 @@ namespace ExpensesTrackerAPI.UnitTests.Services
                     Mock.Of<IMemoryCacheService<IEnumerable<ExpenseType>>>()
                 );
 
-                var result = _itemUnderTest.GetExpenses();
+                var result =  await _itemUnderTest.GetExpenses();
                 Assert.AreEqual(2, result.Count());
             }
         }

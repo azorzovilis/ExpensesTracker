@@ -23,11 +23,11 @@
             _cacheService = cacheService;
         }
 
-        public IEnumerable<Expense> GetExpenses()
+        public async Task<IEnumerable<Expense>> GetExpenses()
         {
-            return _context.Expenses
+            return await _context.Expenses
                 .Include(et => et.ExpenseType)
-                .OrderByDescending(p => p.ExpenseId);
+                .OrderByDescending(p => p.ExpenseId).ToListAsync();
         }
 
         public async Task<Expense> GetExpense(int expenseId)
