@@ -1,0 +1,71 @@
+<div class="container">
+    <div class="pb-2 mt-4 mb-2 border-bottom">
+        <h2>{{actionType}} Expense Details</h2>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="save()" #formDir="ngForm" novalidate class="offset-md-3">
+        <div class="form-group row">
+            <label class="control-label col-md-1" for="Recipient">Recipient</label>
+            <div class="col-md-4">
+                <input class="form-control" type="text" formControlName="recipient">
+            </div>
+            <span class="text-danger ml-3" *ngIf="recipient.invalid && formDir.submitted">
+                Recipient is required.
+            </span>
+        </div>
+
+        <!-- <div class="form-group row">
+            <label class=" control-label col-md-6">Transaction Date</label>
+            <div class="col-md-12">
+                <ngb-datepicker #dp [(ngModel)]="model" (navigate)="date = $event.next"></ngb-datepicker>
+            </div>
+            <span class="text-danger ml-3" *ngIf="justification.invalid && formDir.submitted">
+                Date is required.
+            </span>
+        </div> -->
+
+        <div class="form-group row">
+            <label class=" control-label col-md-1">Amount</label>
+            <div class="col-md-4">
+                <input class="form-control" type="number" formControlName="amount">
+            </div>
+            <span class="text-danger ml-3" *ngIf="amount.invalid && formDir.submitted">
+                Amount is required.
+            </span>
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-md-1" for="Currency">Currency</label>
+            <div class="col-md-4">
+                <select class="form-control" data-val="true" formControlName="currency">
+                    <option value="">--Select Currency--</option>
+                    <option *ngFor="let currency of currencies" value={{currency.iso}}>
+                        {{currency.iso}}
+                    </option>
+                </select>
+            </div>
+            <span class="text-danger ml-3" *ngIf="currency?.invalid && formDir.submitted">
+                Currency is required
+            </span>
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-md-1" for="ExpenseType">Type</label>
+            <div class="col-md-4">
+                <select class="form-control" data-val="true" formControlName="expenseType">
+                    <option value="">--Select Type--</option>
+                    <option *ngFor="let expenseType of expenseTypes" value={{expenseType.expenseTypeId}}>
+                        {{expenseType.description}}
+                    </option>
+                </select>
+            </div>
+            <span class="text-danger  ml-3" *ngIf="expenseType?.invalid && formDir.submitted">
+                Type is required
+            </span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary mr-5 offset-md-1 btn-width">Save</button>
+            <button class="btn btn-danger ml-5" (click)="cancel()">Cancel</button>
+        </div>
+    </form>
+</div>
