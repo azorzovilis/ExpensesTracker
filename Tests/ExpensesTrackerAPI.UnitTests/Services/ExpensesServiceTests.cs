@@ -24,7 +24,7 @@ namespace ExpensesTrackerAPI.UnitTests.Services
         public void SetUp()
         {
             _options = new DbContextOptionsBuilder<ExpensesContext>()
-                .UseInMemoryDatabase(databaseName: "ExpensesTrackerDB")
+                .UseInMemoryDatabase(databaseName: "ExpensesTrackerTestDB")
                 .Options;
 
             // Insert seed data into the database using one instance of the context

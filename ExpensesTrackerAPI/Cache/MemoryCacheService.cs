@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ExpensesTrackerAPI.Cache
+﻿namespace ExpensesTrackerAPI.Cache
 {
+    using System;
     using System.Collections.Concurrent;
     using System.Threading;
+    using System.Threading.Tasks;
+
     using Microsoft.Extensions.Caching.Memory;
 
     public class MemoryCacheService<T> : IMemoryCacheService<T>  

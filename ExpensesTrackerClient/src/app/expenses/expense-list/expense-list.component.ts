@@ -49,7 +49,7 @@ export class ExpenseListComponent implements OnInit {
   delete(expenseId: number) {
     const ans = confirm('Do you want to delete expense with Id: ' + expenseId);
     if (ans) {
-      this.expenseService.deleteExpense(expenseId).subscribe((data) => {
+      this.expenseService.deleteExpense(expenseId).subscribe(() => {
         this.loadExpenses();
       });;
     }
