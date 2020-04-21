@@ -13,15 +13,15 @@
             </span>
         </div>
 
-        <!-- <div class="form-group row">
-            <label class=" control-label col-md-6">Transaction Date</label>
-            <div class="col-md-12">
-                <ngb-datepicker #dp [(ngModel)]="model" (navigate)="date = $event.next"></ngb-datepicker>
+        <div class="form-group row">
+            <label class=" control-label col-md-1">Date</label>
+            <div class="col-md-4">
+                <input class="form-control" type="date" formControlName="transactionDate">
             </div>
-            <span class="text-danger ml-3" *ngIf="justification.invalid && formDir.submitted">
+            <span class="text-danger ml-3" *ngIf="transactionDate.invalid && formDir.submitted">
                 Date is required.
             </span>
-        </div> -->
+        </div>
 
         <div class="form-group row">
             <label class=" control-label col-md-1">Amount</label>

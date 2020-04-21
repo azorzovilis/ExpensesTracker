@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { IExpense } from '../../models/expense';
-import { ExpenseService } from '../expense.service';
+import { IExpense } from '../models/expense';
+import { ExpenseService } from '../services/expense.service';
 
 @Component({
   selector: 'expense-list',
@@ -14,7 +14,17 @@ export class ExpenseListComponent implements OnInit {
   pageTitle = 'Expenses';
   errorMessage = '';
 
-  expenses: IExpense[];
+  _listFilter = '';
+  get listFilter(): string {
+    return this._listFilter;
+  }
+  set listFilter(value: string) {
+    this._listFilter = value;
+    this.filteredExpenses = this.listFilter ? this.performFilter(this.listFilter) : this.expenses;
+  }
+
+  filteredExpenses: IExpense[] = [];
+  expenses: IExpense[] = [];
 
   constructor(private expenseService: ExpenseService) {
 
@@ -24,9 +34,16 @@ export class ExpenseListComponent implements OnInit {
     this.expenseService.getExpenses().subscribe({
       next: expenses => {
         this.expenses = expenses;
+        this.filteredExpenses = this.expenses;
       },
       error: err => this.errorMessage = err
     });
+  }
+
+  performFilter(filterBy: string): IExpense[] {
+    filterBy = filterBy.toLocaleLowerCase();
+    return this.expenses.filter((expense: IExpense) =>
+      expense.recipient.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
   delete(expenseId: number) {

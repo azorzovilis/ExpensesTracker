@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { IExpense } from '../../models/expense';
-import { ExpenseService } from '../expense.service';
+import { IExpense } from '../models/expense';
+import { ExpenseService } from '../services/expense.service';
 
 @Component({
   templateUrl: './expense-detail.component.html',

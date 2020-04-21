@@ -5,7 +5,6 @@ import { catchError, tap, map, retry } from 'rxjs/operators';
 
 import { IExpense } from '../models/expense';
 import { ExpenseType } from '../models/expenseType';
-import { ICurrency } from '../models/currency';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +24,6 @@ export class ExpenseService {
     return this.http.get<IExpense[]>(this.baseApiUrl + 'expenses/')
       .pipe(
         retry(1),
-        tap(data => console.log('All: ' + JSON.stringify(data))),
         catchError(this.handleError)
       );
   }
@@ -34,15 +32,6 @@ export class ExpenseService {
     return this.http.get<IExpense>(this.baseApiUrl + 'expenses/' + id)
       .pipe(
         retry(1),
-        tap(data => console.log('All: ' + JSON.stringify(data))),
-        catchError(this.handleError)
-      );
-  }
-
-  getCurrencies(): Observable<ICurrency[]> {
-    return this.http.get<ICurrency[]>(this.baseApiUrl + 'Currency')
-      .pipe(
-        tap(data => console.log('All: ' + JSON.stringify(data))),
         catchError(this.handleError)
       );
   }
@@ -50,7 +39,7 @@ export class ExpenseService {
   getExpenseTypes(): Observable<ExpenseType[]> {
     return this.http.get<ExpenseType[]>(this.baseApiUrl + 'expenses/types')
       .pipe(
-        tap(data => console.log('All: ' + JSON.stringify(data))),
+        retry(1),
         catchError(this.handleError)
       );
   }
