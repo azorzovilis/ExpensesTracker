@@ -55,7 +55,7 @@
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateExpense([FromRoute] int id, [FromBody] Expense expense)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || id != expense.ExpenseId)
             {
                 return BadRequest(ModelState);
             }
