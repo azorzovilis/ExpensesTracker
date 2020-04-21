@@ -2,7 +2,6 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.Text.Json.Serialization;
     using Enums;
 
     public class Expense
@@ -19,14 +18,16 @@
         public decimal Amount { get; set; }
 
         [Required]
+        [StringLength(100)]
         public string Recipient { get; set; }
 
         [Required]
+        [StringLength(3)]
         public string Currency { get; set; }
 
         [Required]
         public ExpenseTypeId ExpenseTypeId { get; set; }
-        
+
         public virtual ExpenseType ExpenseType { get; set; }
     }
 }

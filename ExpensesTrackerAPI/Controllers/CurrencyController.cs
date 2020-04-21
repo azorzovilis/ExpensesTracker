@@ -22,11 +22,5 @@
 
             return Ok(currencies);
         }
-
-        [HttpGet("{currencyIso}")]
-        public bool IsValidCurrency([FromRoute] string currencyIso)
-        {
-            return _currencyService.IsValidCurrency(currencyIso);
-        }
     }
 }

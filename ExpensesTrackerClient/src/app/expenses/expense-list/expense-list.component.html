@@ -39,8 +39,7 @@
                         <td>{{ expense.expenseType.description }}</td>
                         <td>
                             <a [routerLink]="['/expense/edit/', expense.expenseId]">Edit</a> |
-                            <a [routerLink]="['/expense/delete/', expense.expenseId]"
-                                (click)="delete(expense.expenseId)">Delete</a>
+                            <a [routerLink]="" (click)="delete(expense.expenseId)">Delete</a>
                         </td>
                     </tr>
                 </tbody>

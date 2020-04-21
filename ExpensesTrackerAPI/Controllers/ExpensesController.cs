@@ -1,6 +1,5 @@
 ﻿namespace ExpensesTrackerAPI.Controllers
 {
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -14,12 +13,15 @@
     public class ExpensesController : ControllerBase
     {
         private readonly IExpensesService _expensesService;
+        private readonly ICurrencyService _currencyService;
         private readonly ILogger<ExpensesController> _logger;
 
         public ExpensesController(IExpensesService expensesService,
+            ICurrencyService currencyService,
             ILogger<ExpensesController> logger)
         {
             _expensesService = expensesService;
+            _currencyService = currencyService;
             _logger = logger;
         }
 
@@ -44,7 +46,7 @@
             if (expense == null)
             {
                 _logger.LogInformation($"Failed to retrieve expense with id={id}");
-                return NotFound();
+                return NotFound(id);
             }
 
             return Ok(expense);
@@ -58,9 +60,10 @@
                 return BadRequest(ModelState);
             }
 
-            if (id != expense.ExpenseId)
+            if (!IsValidCurrency(expense.Currency))
             {
-                return BadRequest();
+                _logger.LogWarning($"Unsupported currency iso '{expense.Currency}'");
+                return BadRequest(expense.Currency);
             }
 
             try
@@ -92,6 +95,12 @@
                 return BadRequest(ModelState);
             }
 
+            if (!IsValidCurrency(expense.Currency))
+            { 
+                _logger.LogWarning($"Unsupported currency iso '{expense.Currency}'");
+                return BadRequest(expense.Currency);
+            }
+
             var newExpense = await _expensesService.CreateExpense(expense);
 
             return CreatedAtAction("GetExpense", new { id = newExpense.ExpenseId }, newExpense);
@@ -109,7 +118,7 @@
             if (expense == null)
             {
                 _logger.LogInformation($"Failed to delete expense with id={id}");
-                return NotFound();
+                return NotFound(id);
             }
 
             await _expensesService.DeleteExpense(expense);
@@ -125,5 +134,7 @@
 
             return Ok(expenseTypes);
         }
+
+        private bool IsValidCurrency(string currencyIso) => _currencyService.IsValidCurrency(currencyIso);
     }
 }
