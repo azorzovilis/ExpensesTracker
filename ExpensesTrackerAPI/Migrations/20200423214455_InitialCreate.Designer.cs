@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpensesTrackerAPI.Migrations
 {
     [DbContext(typeof(ExpensesContext))]
-    [Migration("20200421170858_InitialCreate")]
+    [Migration("20200423214455_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,7 +67,7 @@ namespace ExpensesTrackerAPI.Migrations
                         {
                             ExpenseId = 2,
                             Amount = 5.6m,
-                            Currency = "USD",
+                            Currency = "CHF",
                             ExpenseTypeId = 2,
                             Recipient = "Eliza",
                             TransactionDate = new DateTime(2020, 4, 19, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -85,10 +85,82 @@ namespace ExpensesTrackerAPI.Migrations
                         {
                             ExpenseId = 4,
                             Amount = 105.22m,
-                            Currency = "CHF",
+                            Currency = "GBP",
                             ExpenseTypeId = 1,
                             Recipient = "Thomas",
                             TransactionDate = new DateTime(2020, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ExpenseId = 5,
+                            Amount = 44.17m,
+                            Currency = "JPY",
+                            ExpenseTypeId = 1,
+                            Recipient = "John",
+                            TransactionDate = new DateTime(2020, 4, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ExpenseId = 6,
+                            Amount = 25.00m,
+                            Currency = "CHF",
+                            ExpenseTypeId = 2,
+                            Recipient = "Rick",
+                            TransactionDate = new DateTime(2020, 4, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ExpenseId = 7,
+                            Amount = 182.59m,
+                            Currency = "AUD",
+                            ExpenseTypeId = 1,
+                            Recipient = "Patricia",
+                            TransactionDate = new DateTime(2020, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ExpenseId = 8,
+                            Amount = 56.16m,
+                            Currency = "EUR",
+                            ExpenseTypeId = 0,
+                            Recipient = "Glen",
+                            TransactionDate = new DateTime(2020, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ExpenseId = 9,
+                            Amount = 8.25m,
+                            Currency = "EUR",
+                            ExpenseTypeId = 1,
+                            Recipient = "Maria",
+                            TransactionDate = new DateTime(2020, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ExpenseId = 10,
+                            Amount = 98.99m,
+                            Currency = "CHF",
+                            ExpenseTypeId = 2,
+                            Recipient = "George",
+                            TransactionDate = new DateTime(2020, 4, 24, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ExpenseId = 11,
+                            Amount = 3.99m,
+                            Currency = "USD",
+                            ExpenseTypeId = 1,
+                            Recipient = "Paul",
+                            TransactionDate = new DateTime(2020, 4, 24, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ExpenseId = 12,
+                            Amount = 54.12m,
+                            Currency = "EUR",
+                            ExpenseTypeId = 0,
+                            Recipient = "Caren",
+                            TransactionDate = new DateTime(2020, 4, 24, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 

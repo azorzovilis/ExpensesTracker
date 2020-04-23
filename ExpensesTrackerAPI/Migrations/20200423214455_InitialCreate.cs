@@ -63,9 +63,17 @@ namespace ExpensesTrackerAPI.Migrations
                 values: new object[,]
                 {
                     { 3, 35.88m, "EUR", 0, "Artemis", new DateTime(2020, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 8, 56.16m, "EUR", 0, "Glen", new DateTime(2020, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 12, 54.12m, "EUR", 0, "Caren", new DateTime(2020, 4, 24, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 1, 10.4m, "GBP", 1, "Alex", new DateTime(2020, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 4, 105.22m, "CHF", 1, "Thomas", new DateTime(2020, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, 5.6m, "USD", 2, "Eliza", new DateTime(2020, 4, 19, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 4, 105.22m, "GBP", 1, "Thomas", new DateTime(2020, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5, 44.17m, "JPY", 1, "John", new DateTime(2020, 4, 22, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 7, 182.59m, "AUD", 1, "Patricia", new DateTime(2020, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 9, 8.25m, "EUR", 1, "Maria", new DateTime(2020, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 11, 3.99m, "USD", 1, "Paul", new DateTime(2020, 4, 24, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, 5.6m, "CHF", 2, "Eliza", new DateTime(2020, 4, 19, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 6, 25.00m, "CHF", 2, "Rick", new DateTime(2020, 4, 22, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 10, 98.99m, "CHF", 2, "George", new DateTime(2020, 4, 24, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.CreateIndex(

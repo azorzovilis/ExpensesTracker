@@ -13,6 +13,8 @@ export class ExpenseListComponent implements OnInit {
   editField: string;
   pageTitle = 'Expenses';
   errorMessage = '';
+  page = 1;
+  pageSize = 10;
 
   _listFilter = '';
   get listFilter(): string {
@@ -24,7 +26,7 @@ export class ExpenseListComponent implements OnInit {
   }
 
   filteredExpenses: IExpense[] = [];
-  expenses: IExpense[] = [];
+  expenses: IExpense[];
 
   constructor(private expenseService: ExpenseService) {
 
