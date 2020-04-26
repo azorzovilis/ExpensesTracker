@@ -5,7 +5,7 @@
     <div class='card-body'>
         <div class='row'>
             <p class='col-md-1'>
-                <a class="btn btn-primary" [routerLink]="['/add']">Add</a>
+                <a class="btn btn-primary" [routerLink]="['/add']">Add <i class="fas fa-plus-circle"></i></a>
             </p>
             <div class='col-md-3'>
                 <input class="form-control" type='text' [(ngModel)]='listFilter' placeholder="Filter by recipient..." />
@@ -20,7 +20,7 @@
                     </div>
                  </div>
                  <div class="row">
-                   <strong>Loading data</strong>
+                   <strong>Loading expenses</strong>
                  </div>
              </div>
             
@@ -32,7 +32,7 @@
                         <th>Recipient</th>
                         <th>Amount</th>
                         <th>Type</th>
-                        <th>Actions</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,13 +51,14 @@
                         <td>{{ expense.amount | currency:expense.currency:'symbol-narrow':'1.2-2'}}</td>
                         <td>{{ expense.expenseType.description }}</td>
                         <td>
-                            <a [routerLink]="['/expense/edit/', expense.expenseId]">Edit</a> |
-                            <a [routerLink]="" (click)="delete(expense.expenseId)">Delete</a>
+                            <a [routerLink]="['/expense/edit/', expense.expenseId]"><i class="fas fa-edit"></i></a>
+                                <span> | </span>
+                            <a [routerLink]="" (click)="delete(expense.expenseId)"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <div *ngIf='expenses' class="col-12 justify-content-center">
+            <div *ngIf='expenses?.length > 0' class="col-12 justify-content-center">
                 <ngb-pagination [collectionSize]="filteredExpenses.length" [(page)]="page" [maxSize]="5" [rotate]="true"
                     [ellipses]="false" [boundaryLinks]="true">
                 </ngb-pagination>
