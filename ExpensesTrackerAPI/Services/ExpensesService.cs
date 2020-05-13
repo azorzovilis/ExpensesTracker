@@ -10,58 +10,54 @@
 
     public class ExpensesService : IExpensesService
     {
-        private readonly ExpensesContext _context;
-        private readonly IDataRepository<Expense> _repo;
+        private readonly IDataRepository<Expense> _expensesRepository;
+        private readonly IDataRepository<ExpenseType> _expenseTypeRepository;
         private readonly IMemoryCacheService<IEnumerable<ExpenseType>> _cacheService;
 
-        public ExpensesService(ExpensesContext context,
-            IDataRepository<Expense> repo,
+        public ExpensesService(IDataRepository<Expense> expensesRepository,
+            IDataRepository<ExpenseType> expenseTypeRepository,
             IMemoryCacheService<IEnumerable<ExpenseType>> cacheService)
         {
-            _context = context;
-            _repo = repo;
+            _expensesRepository = expensesRepository;
+            _expenseTypeRepository = expenseTypeRepository;
             _cacheService = cacheService;
         }
 
         public async Task<IEnumerable<Expense>> GetExpenses()
         {
-            return await _context.Expenses
-                .Include(et => et.ExpenseType)
-                .OrderByDescending(exp => exp.ExpenseId)
+            return await _expensesRepository.GetAll(
+                    orderBy: q => q.OrderByDescending(exp => exp.ExpenseId),
+                    includeProperties: exp => exp.ExpenseType)
                 .ToListAsync();
         }
 
         public async Task<Expense> GetExpense(int expenseId)
         {
-            return await _context.Expenses
-                .Include(et => et.ExpenseType)
-                .SingleOrDefaultAsync(exp => exp.ExpenseId == expenseId);
+            return await _expensesRepository.GetById(expenseId, includeProperties: exp => exp.ExpenseType);
         }
 
         public async Task<Expense> CreateExpense(Expense expense)
         {
-            _repo.Add(expense);
-            return await _repo.SaveAsync(expense);
+            _expensesRepository.Add(expense);
+            return await _expensesRepository.SaveAsync(expense);
         }
 
         public async Task<Expense> UpdateExpense(Expense expense)
         {
-            _context.Entry(expense).State = EntityState.Modified;
+            _expensesRepository.Update(expense);
 
-            _repo.Update(expense);
-
-            return await _repo.SaveAsync(expense);
+            return await _expensesRepository.SaveAsync(expense);
         }
 
         public async Task<Expense> DeleteExpense(Expense expense)
         {
-            _repo.Delete(expense);
-            return await _repo.SaveAsync(expense);
+            _expensesRepository.Delete(expense);
+            return await _expensesRepository.SaveAsync(expense);
         }
 
         public async Task<bool> ExpenseExists(int expenseId)
         {
-            return await _context.Expenses.AnyAsync(e => e.ExpenseId == expenseId);
+            return await _expensesRepository.EntityExists(expenseId);
         }
 
         public async Task<IEnumerable<ExpenseType>> GetExpenseTypes()
@@ -69,7 +65,7 @@
             const string expenseTypeKey = "ExpenseTypes";
 
             return await _cacheService
-                .GetOrCreate(expenseTypeKey, async () => await _context.ExpenseType.ToListAsync());
+                .GetOrCreate(expenseTypeKey, async () => await _expenseTypeRepository.GetAll().ToListAsync());
         }
     }
 }
