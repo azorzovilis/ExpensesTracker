@@ -5,19 +5,21 @@
     using System.Linq.Expressions;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata;
 
     public class DataRepository<T> : IDataRepository<T> where T : class
     {
         private readonly ExpensesContext _context;
         private readonly DbSet<T> _dbSet;
-
+        private IProperty KeyProperty => _context.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties[0];
+        
         public DataRepository(ExpensesContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();
         }
 
-        public IQueryable<T> GetAll(
+        public IQueryable<T> Get(
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Expression<Func<T, bool>> filter = null,
             params Expression<Func<T, object>>[] includeProperties)
@@ -42,15 +44,12 @@
 
             query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
 
-            var keyProperty = _context.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties[0];
-            return await query.FirstOrDefaultAsync(e => EF.Property<object>(e, keyProperty.Name) == id);
+            return await query.FirstOrDefaultAsync(e => EF.Property<object>(e, KeyProperty.Name).Equals(id));
         }
 
         public async Task<bool> EntityExists(object id)
         {
-            var keyProperty = _context.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties[0];
-
-            return await _dbSet.AnyAsync(e => EF.Property<object>(e, keyProperty.Name) == id);
+            return await _dbSet.AnyAsync(e => EF.Property<object>(e, KeyProperty.Name).Equals(id));
         }
 
         public void Add(T entity)

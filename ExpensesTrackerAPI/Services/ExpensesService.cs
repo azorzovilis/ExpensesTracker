@@ -25,7 +25,7 @@
 
         public async Task<IEnumerable<Expense>> GetExpenses()
         {
-            return await _expensesRepository.GetAll(
+            return await _expensesRepository.Get(
                     orderBy: q => q.OrderByDescending(exp => exp.ExpenseId),
                     includeProperties: exp => exp.ExpenseType)
                 .ToListAsync();
@@ -65,7 +65,7 @@
             const string expenseTypeKey = "ExpenseTypes";
 
             return await _cacheService
-                .GetOrCreate(expenseTypeKey, async () => await _expenseTypeRepository.GetAll().ToListAsync());
+                .GetOrCreate(expenseTypeKey, async () => await _expenseTypeRepository.Get().ToListAsync());
         }
     }
 }
