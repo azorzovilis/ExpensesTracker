@@ -39,7 +39,7 @@
                 <select class="form-control" data-val="true" formControlName="currency">
                     <option value="">--Select Currency--</option>
                     <option *ngFor="let currency of currencies" value={{currency.iso}}>
-                        {{currency.iso}}
+                        {{currency.name}} ({{currency.iso}})
                     </option>
                 </select>
             </div>
