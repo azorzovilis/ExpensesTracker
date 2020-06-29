@@ -38,7 +38,7 @@
                 : query;
         }
 
-        public async Task<T> GetById(object id, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<T> GetById(int id, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = _dbSet;
 
@@ -47,7 +47,7 @@
             return await query.FirstOrDefaultAsync(e => EF.Property<object>(e, KeyProperty.Name).Equals(id));
         }
 
-        public async Task<bool> EntityExists(object id)
+        public async Task<bool> EntityExists(int id)
         {
             return await _dbSet.AnyAsync(e => EF.Property<object>(e, KeyProperty.Name).Equals(id));
         }
